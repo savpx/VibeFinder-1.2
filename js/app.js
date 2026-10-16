@@ -81,9 +81,10 @@ function fadeAudioVolume(audio, targetVolume, duration) {
   audioVolumeFades.set(audio, fade);
 }
 
-uiButtonAudio.preload = 'auto';
+// Ленивая загрузка: ничего не качаем во время первичной сборки layout.
+uiButtonAudio.preload = 'none';
 uiButtonAudio.volume = UI_CLICK_VOLUME;
-transitionAudio.preload = 'auto';
+transitionAudio.preload = 'none';
 transitionAudio.volume = TRANSITION_VOLUME;
 let transitionFadeOutStarted = false;
 
@@ -129,7 +130,8 @@ function startBackgroundPlaylist() {
   ];
   const players = [new Audio(), new Audio()];
   players.forEach((player) => {
-    player.preload = 'auto';
+    // 'none' — треки не буферизуются до фактического запроса на воспроизведение.
+    player.preload = 'none';
     player.volume = 0;
   });
   let activeAudio = players[0];
@@ -1607,6 +1609,7 @@ function renderAsmrGame() {
       return;
     }
     const audio = new Audio(audioFile);
+    audio.preload = 'none';
     audios.add(audio);
     audio.addEventListener('error', () => {
       status.textContent = `Звук клавиши ${key} недоступен.`;
@@ -1657,10 +1660,31 @@ function renderAsmrGame() {
 }
 
 // Порядок важен: сначала локализация (переводит статические тексты и запускает
-// наблюдатель за динамическими узлами), затем построение UI и запуск фоновой музыки.
+// наблюдатель за динамическими узлами), затем построение UI.
 initI18n('ru');
 initParticles();
 renderQuestion();
 showScreen('home');
 handleHashRoute();
-startBackgroundPlaylist();
+
+// Аудио стартует лениво — только после первого взаимодействия пользователя.
+// Так аудио-буферы не конкурируют с рендером первого экрана, частицами
+// и анимацией появления (layout уже собран к этому моменту).
+let audioPipelineStarted = false;
+function startAudioPipelineLazily() {
+  if (audioPipelineStarted) return;
+  audioPipelineStarted = true;
+  document.removeEventListener('pointerdown', startAudioPipelineLazily);
+  document.removeEventListener('keydown', startAudioPipelineLazily);
+
+  // Прогреваем UI-звуки (клик/переход), чтобы первый клик не буферизовался.
+  uiButtonAudio.preload = 'auto';
+  uiButtonAudio.load();
+  transitionAudio.preload = 'auto';
+  transitionAudio.load();
+
+  // Фоновая музыка — асинхронно, не блокируя кадры.
+  startBackgroundPlaylist();
+}
+document.addEventListener('pointerdown', startAudioPipelineLazily, { once: true });
+document.addEventListener('keydown', startAudioPipelineLazily, { once: true });
