@@ -10,6 +10,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# --- Deploy platforms ---
+.vercel/
+.netlify/
+
 # --- Editors / OS ---
 .vscode/
 .idea/
@@ -22,9 +26,24 @@ dist/
 build/
 out/
 .cache/
-.vercel/
-.netlify/
 *.log
 
 # --- Local temp files ---
 .tmp_*
+*.tmp
+
+# --- Temporary local asset backups ---
+# Never track local backups of optimized css/js/audio assets.
+*-backup/
+*-backup.*
+backup/
+_backup/
+assets-backup/
+audio-backup/
+css-backup/
+js-backup/
+*.bak
+*.bak.*
+*.backup
+*.orig
+*~

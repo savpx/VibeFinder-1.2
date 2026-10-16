@@ -463,7 +463,6 @@ input {
   }
 }
 
-@keyframes creation-pulse { from { transform: scale(0.92); } to { transform: scale(1.06); } }
 @keyframes creation-message-glow { from { opacity: 0.68; } to { opacity: 1; } }
 
 .hero-wrap {
@@ -1394,16 +1393,6 @@ body.theme-forest .quote-card {
 
 .chaos-board { background: repeating-linear-gradient(135deg, #36213a 0 24px, #4b2842 24px 48px); }
 .balloon { border-radius: 50% 50% 48% 48%; }
-.clue-card {
-  position: absolute;
-  padding: 0.8rem;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--text);
-  background: var(--panel-strong);
-  cursor: pointer;
-}
-.clue-card.found { color: var(--primary); border-color: var(--primary); }
 
 .paint-by-numbers-board {
   display: grid;
@@ -2095,10 +2084,6 @@ body.theme-retro #share-screen {
   .game-board--constellation,
   .game-board--secret-room {
     min-height: 280px;
-  }
-
-  .clue-card--right {
-    transform: translateX(-100%);
   }
 }
 
