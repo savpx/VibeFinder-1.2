@@ -1,11 +1,12 @@
 {
   "name": "vibe-finder-bot",
   "version": "1.0.0",
-  "description": "Telegram bot for the Vibe Finder project (opens the site as a Telegram Web App).",
+  "description": "Telegram bot for the Vibe Finder project (Vercel serverless webhook + Web App button).",
   "type": "module",
-  "main": "bot.js",
+  "main": "api/webhook.js",
   "scripts": {
-    "start": "node bot.js"
+    "set-webhook": "node scripts/set-webhook.js",
+    "delete-webhook": "node scripts/delete-webhook.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
