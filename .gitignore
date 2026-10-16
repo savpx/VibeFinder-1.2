@@ -1,0 +1,30 @@
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Build artifacts / caches ---
+dist/
+build/
+out/
+.cache/
+.vercel/
+.netlify/
+*.log
+
+# --- Local temp files ---
+.tmp_*
