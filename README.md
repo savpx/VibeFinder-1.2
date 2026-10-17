@@ -12,7 +12,7 @@
 
 1. **Answer ten quick questions** about your mood, energy, pace, and what you'd like to do right now.
 2. **Get your vibe** — the site matches your answers to one of fourteen atmospheres.
-3. **Step into it** — each vibe has its own colors, a description, a rotating quote, background music, and a mini-game.
+3. **Step into it** — each vibe has its own colors, a description, a rotating quote, and a mini-game.
 4. **Share it** — each result has a link, so you can send your vibe of the day to a friend.
 
 There's no account, no sign-up, and nothing to install. It just works in your browser.
@@ -78,7 +78,7 @@ Switch the language anytime from the button in the top-left corner.
 
 ## Sound
 
-Vibe Finder has gentle audio — background music, soft interface clicks, a transition sound, and a set of ASMR key sounds in the keyboard game. Sound starts after your first interaction (that's a browser rule), and you can keep your device muted if you prefer a silent visit.
+Vibe Finder has gentle audio — soft interface clicks, a transition sound, and a set of ASMR key sounds in the keyboard game. Sound starts after your first interaction (that's a browser rule), and you can keep your device muted if you prefer a silent visit.
 
 ---
 
@@ -116,7 +116,7 @@ Any static server works equally well (for example `npx serve VibeFinder`).
 
 ## Feedback
 
-Found a bug, or have an idea for a new vibe? Reach out via the support button in the bottom-right corner of the site.
+Found a bug, or have an idea for a new vibe? Open an issue on the project repository.
 
 ---
 

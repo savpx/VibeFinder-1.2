@@ -4,12 +4,8 @@
 
 [build]
   publish = "."
-  # Explicitly disable a build command: the bot is NOT a frontend build step.
+  # The site is fully static: no build step is required.
   command = ""
-
-# Never run the Telegram bot (bot.js) as part of CI build/deploy.
-[build.environment]
-  NETLIFY_USE_YARN = "false"
 
 # SPA fallback: serve index.html for any path (hash routes like #/share/<slug>
 # are handled client-side and never hit the server).

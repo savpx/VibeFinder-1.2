@@ -12,7 +12,6 @@ const screens = {
   vibe: document.getElementById('vibe-screen'),
   share: document.getElementById('share-screen'),
 };
-const supportLink = document.getElementById('support-link');
 
 const startButton = document.getElementById('start-btn');
 const vibeMenuToggle = document.getElementById('vibe-menu-toggle');
@@ -54,7 +53,6 @@ const gameStage = document.getElementById('game-stage');
 const asmrStage = document.getElementById('asmr-stage');
 const creationMessage = document.getElementById('creation-message');
 const vibeTransition = document.getElementById('vibe-transition');
-const BACKGROUND_MUSIC_VOLUME = 0.05;
 const UI_CLICK_VOLUME = 0.22;
 const TRANSITION_VOLUME = 0.20;
 const audioVolumeFades = new WeakMap();
@@ -122,91 +120,6 @@ document.addEventListener('click', (event) => {
   }
 }, true);
 
-function startBackgroundPlaylist() {
-  const tracks = [
-    'audio/music/background4.mp3',
-    'audio/music/background2.mp3',
-    'audio/music/background3.mp3',
-  ];
-  const players = [new Audio(), new Audio()];
-  players.forEach((player) => {
-    // 'none' — треки не буферизуются до фактического запроса на воспроизведение.
-    player.preload = 'none';
-    player.volume = 0;
-  });
-  let activeAudio = players[0];
-  let preloadedAudio = players[1];
-  let trackIndex = 0;
-  let started = false;
-  let trackFadeOutStarted = false;
-  const configureTrack = (player, index) => {
-    player.pause();
-    player.src = tracks[index];
-    player.load();
-  };
-  const resumeOnInteraction = () => {
-    if (started) return;
-    startCurrentTrack();
-  };
-  const removeInteractionFallback = () => {
-    document.removeEventListener('pointerdown', resumeOnInteraction);
-    document.removeEventListener('keydown', resumeOnInteraction);
-  };
-  const installInteractionFallback = () => {
-    document.addEventListener('pointerdown', resumeOnInteraction);
-    document.addEventListener('keydown', resumeOnInteraction);
-  };
-  const startCurrentTrack = () => {
-    activeAudio.volume = 0;
-    const playback = activeAudio.play();
-    if (!playback) {
-      started = true;
-      fadeAudioVolume(activeAudio, BACKGROUND_MUSIC_VOLUME, 700);
-      removeInteractionFallback();
-      return;
-    }
-    playback.then(() => {
-      started = true;
-      fadeAudioVolume(activeAudio, BACKGROUND_MUSIC_VOLUME, 700);
-      removeInteractionFallback();
-    }).catch((error) => {
-      started = false;
-      if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') {
-        console.error(`Background track failed: ${tracks[trackIndex]}`, error);
-      }
-      installInteractionFallback();
-    });
-  };
-
-  const advanceTrack = (event) => {
-    if (event.currentTarget !== activeAudio) return;
-    trackIndex = (trackIndex + 1) % tracks.length;
-    [activeAudio, preloadedAudio] = [preloadedAudio, activeAudio];
-    configureTrack(preloadedAudio, (trackIndex + 1) % tracks.length);
-    trackFadeOutStarted = false;
-    startCurrentTrack();
-  };
-  players.forEach((player) => {
-    player.addEventListener('ended', advanceTrack);
-    player.addEventListener('timeupdate', () => {
-      if (player !== activeAudio || trackFadeOutStarted) return;
-      const remaining = player.duration - player.currentTime;
-      if (Number.isFinite(remaining) && remaining <= 0.7) {
-        trackFadeOutStarted = true;
-        fadeAudioVolume(player, 0, Math.max(100, remaining * 1000));
-      }
-    });
-    player.addEventListener('error', () => {
-      if (player.error?.code !== 1) {
-        console.error(`Background track failed: ${player.currentSrc || player.src}`);
-      }
-    });
-  });
-  configureTrack(activeAudio, trackIndex);
-  configureTrack(preloadedAudio, trackIndex + 1);
-  startCurrentTrack();
-}
-
 function initParticles() {
   particlesWrap.innerHTML = '';
   for (let index = 0; index < 48; index += 1) {
@@ -226,7 +139,6 @@ function showScreen(name) {
     screen.classList.toggle('active', key === name);
   });
   document.querySelector('.page-shell').dataset.activeScreen = name;
-  supportLink.hidden = name === 'survey' || name === 'vibe' || name === 'share';
   if (name !== 'vibe') screens.vibe.classList.remove('vibe-screen-reveal');
   if (name !== 'vibe') closeVibeMenu();
 }
@@ -1682,9 +1594,6 @@ function startAudioPipelineLazily() {
   uiButtonAudio.load();
   transitionAudio.preload = 'auto';
   transitionAudio.load();
-
-  // Фоновая музыка — асинхронно, не блокируя кадры.
-  startBackgroundPlaylist();
 }
 document.addEventListener('pointerdown', startAudioPipelineLazily, { once: true });
 document.addEventListener('keydown', startAudioPipelineLazily, { once: true });
