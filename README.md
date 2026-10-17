@@ -110,7 +110,7 @@ Any static server works equally well (for example `npx serve VibeFinder`).
 
 - **HTML**, **CSS**, and **JavaScript** (native ES modules)
 - No frameworks, no build tools, no dependencies
-- Hosted on **GitHub Pages** at [vibefinder.tech](https://vibefinder.tech)
+- Pure static site, host-agnostic (served from the repository root)
 
 ---
 
